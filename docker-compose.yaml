@@ -16,7 +16,7 @@ services:
     # develop: ...
 
   psql_bp:
-    container_name : "break"
+    container_name : "projectName"
     image: postgres:17-alpine
     environment:
       POSTGRES_DB: ${DB_DATABASE}
@@ -29,11 +29,6 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
 
-  llm:
-    provider:
-      type: model
-      options:
-        model: ai/gemma3:latest
 
 networks:
   default:

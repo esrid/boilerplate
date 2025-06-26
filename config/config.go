@@ -78,7 +78,6 @@ func DefaultConfig() *Server {
 }
 
 type AppConfig struct {
-	Port         string
 	Environement string
 	HTTP         *Server
 	Database     *Database

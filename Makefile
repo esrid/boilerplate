@@ -32,5 +32,7 @@ docker-run:
 
 .PHONY: esbuild tailwind dev-js dev-css dev build clean docker-build docker-run
 
-rename: 
-	 find . -type f -name '*.go.tpl' -exec sed -i '' 's/yourapp/{{projectName}}/g' {} +
+.PHONY: rename
+
+rename:
+	find . -type f -name '*.go.tpl' -exec sed -i '' "s/{{projectName}}/${projectName}/g" {} +

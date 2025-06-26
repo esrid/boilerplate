@@ -20,6 +20,7 @@ type HTTPServer struct {
 	cfg    *config.AppConfig
 
 	router Router
+	server *http.Server
 }
 
 // NewHTTPServer creates a new HTTP server instance
@@ -37,7 +38,7 @@ func NewHTTPServer(db *pgxpool.Pool, logger *slog.Logger, config *config.AppConf
 // Start starts the HTTP server and blocks until shutdown
 func (s *HTTPServer) Start() error {
 	s.server = &http.Server{
-		Addr:         ":" + s.cfg.Port,
+		Addr:         ":" + s.cfg.HTTP.Port,
 		Handler:      s.router.Handler(),
 		IdleTimeout:  s.cfg.HTTP.IdleTimeout,
 		ReadTimeout:  s.cfg.HTTP.ReadTimeout,
@@ -50,7 +51,7 @@ func (s *HTTPServer) Start() error {
 	// Start server in goroutine
 	go func() {
 		s.logger.Info("starting server",
-			slog.String("port", s.cfg.Port),
+			slog.String("port", s.cfg.HTTP.Port),
 		)
 
 		if err := s.server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
@@ -79,7 +80,7 @@ func (s *HTTPServer) waitForShutdown(serverErr <-chan error) error {
 
 // gracefulShutdown handles graceful server shutdown
 func (s *HTTPServer) gracefulShutdown() error {
-	ctx, cancel := context.WithTimeout(context.Background(), s.config.ShutdownTimeout)
+	ctx, cancel := context.WithTimeout(context.Background(), s.cfg.HTTP.ShutdownTimeout)
 	defer cancel()
 
 	s.logger.Info("shutting down server...")
