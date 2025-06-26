@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"sync"
 	"time"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 type Database struct {
