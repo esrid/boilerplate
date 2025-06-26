@@ -1,0 +1,8 @@
+{
+  "devDependencies": {
+    "daisyui": "^5.0.43"
+  },
+  "dependencies": {
+    "@hotwired/stimulus": "^3.2.2"
+  }
+}

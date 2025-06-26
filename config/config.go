@@ -94,7 +94,6 @@ var (
 func Load() *AppConfig {
 	once.Do(func() {
 		appConfigInstance = &AppConfig{
-			Port:         getEnv("APP_PORT", "8080"),
 			Environement: getEnv("APP_ENV", "development"),
 			HTTP:         DefaultConfig(),
 			Database:     DefaultDatabase(),

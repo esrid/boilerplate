@@ -36,3 +36,6 @@ docker-run:
 
 rename:
 	find . -type f -name '*.go.tpl' -exec sed -i '' "s/{{projectName}}/${projectName}/g" {} +
+
+install:
+	 npm i -D daisyui@latest && npm i "@hotwired/stimulus"
