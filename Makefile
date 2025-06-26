@@ -35,7 +35,7 @@ docker-run:
 .PHONY: rename
 
 rename:
-	find . -type f -name '*.go.tpl' -exec sed -i '' "s/{{projectName}}/${projectName}/g" {} +
+	find . -type f -name '*.go.tpl' -exec sed -i '' "s/yourapp/${projectName}/g" {} +
 
 install:
 	 npm i -D daisyui@latest && npm i "@hotwired/stimulus"
