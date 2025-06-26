@@ -2,6 +2,7 @@ package config
 
 import (
 	"fmt"
+	"log/slog"
 	"os"
 	"strconv"
 	"sync"
@@ -78,6 +79,7 @@ func DefaultConfig() *Server {
 }
 
 type AppConfig struct {
+	Log          *slog.Logger
 	Environement string
 	HTTP         *Server
 	Database     *Database
@@ -99,8 +101,57 @@ func Load() *AppConfig {
 			Database:     DefaultDatabase(),
 			APIKEY:       DefaultAPIKEY(),
 		}
+		appConfigInstance.slogInit()
 	})
 	return appConfigInstance
+}
+
+func (c *AppConfig) slogInit() {
+	var handler slog.Handler
+	var level slog.Level
+
+	// Determine log level from environment
+	switch getEnv("LOG_LEVEL", "") {
+	case "DEBUG":
+		level = slog.LevelDebug
+	case "INFO":
+		level = slog.LevelInfo
+	case "WARN":
+		level = slog.LevelWarn
+	case "ERROR":
+		level = slog.LevelError
+	default:
+		// Default based on environment
+		if c.Environement == "production" {
+			level = slog.LevelInfo
+		} else {
+			level = slog.LevelDebug
+		}
+	}
+
+	opts := &slog.HandlerOptions{
+		Level:     level,
+		AddSource: c.Environement != "production", // Add source info in non-prod
+		ReplaceAttr: func(groups []string, a slog.Attr) slog.Attr {
+			// Customize timestamp format
+			if a.Key == slog.TimeKey {
+				a.Value = slog.StringValue(a.Value.Time().Format("2006-01-02T15:04:05.000Z07:00"))
+			}
+			return a
+		},
+	}
+
+	logFormat := getEnv("LOG_FORMAT", "")
+	if c.Environement == "production" || logFormat == "json" {
+		handler = slog.NewJSONHandler(os.Stdout, opts)
+	} else {
+		handler = slog.NewTextHandler(os.Stdout, opts)
+	}
+
+	// Create logger with app-wide attributes
+	logger := slog.New(handler)
+	slog.SetDefault(logger)
+	c.Log = logger
 }
 
 func getEnv(key, fallback string) string {
