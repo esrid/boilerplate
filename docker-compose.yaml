@@ -1,0 +1,45 @@
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    depends_on:
+      llm:
+        condition: service_started
+    # Remove develop section if not using DevSpace
+    # develop: ...
+
+  psql_bp:
+    container_name : "break"
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${DB_DATABASE}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:5432"
+    volumes:
+      - psql_volume_bp:/var/lib/postgresql/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  llm:
+    provider:
+      type: model
+      options:
+        model: ai/gemma3:latest
+
+networks:
+  default:
+    name: mynet
+    driver: bridge
+
+volumes:
+  psql_volume_bp:
+
