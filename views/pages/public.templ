@@ -1,0 +1,14 @@
+package pages 
+
+import "boilerplate/views/components"
+
+templ About() {
+	<div>
+		about page
+		@components.Button(components.ButtonProps{
+			Text:  "hi",
+			Type:  "button",
+			Class: "btn-secondary",
+		})
+	</div>
+}

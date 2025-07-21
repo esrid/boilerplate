@@ -1,0 +1,99 @@
+package components
+
+import "fmt"
+
+type ButtonProps struct {
+	Text  string
+	Type  string // "button", "submit", "reset"
+	Class string
+}
+
+templ Button(props ButtonProps) {
+	<button type={ props.Type } class={ fmt.Sprintf("btn btn-primary %s", props.Class) }>{ props.Text }</button>
+}
+
+type InputProps struct {
+	Name  string
+	Label string
+	Type  string
+	Value string
+}
+
+templ Input(props InputProps) {
+	<div>
+		<label for={ props.Name }>{ props.Label }</label>
+		<input type={ props.Type } name={ props.Name } id={ props.Name } value={ props.Value }/>
+	</div>
+}
+
+type PageHead struct {
+	Title string
+	Meta  string
+}
+
+templ head(meta PageHead) {
+	<head>
+		<meta charset="UTF-8"/>
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<title>{ meta.Title }</title>
+		<link href="/static/css/style.css" rel="stylesheet"/>
+	</head>
+}
+
+templ Layout(meta PageHead, content templ.Component) {
+	<!DOCTYPE html>
+	<html lang="en">
+		@head(meta)
+		<body>
+			@navigation(ctx)
+			@content
+		</body>
+	</html>
+}
+
+templ connected() {
+	<div class="navbar bg-base-100">
+		<div class="navbar-start">
+			<div class="dropdown">
+				<div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path></svg>
+				</div>
+				<ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+					<li><a href="/dashboard">Dashboard</a></li>
+					<li><a href="/profile">Profile</a></li>
+				</ul>
+			</div>
+			<a href="/" class="btn btn-ghost text-xl">daisyUI</a>
+		</div>
+		<div class="navbar-center hidden lg:flex">
+			<ul class="menu menu-horizontal px-1">
+				<li><a href="/dashboard">Dashboard</a></li>
+				<li><a href="/profile">Profile</a></li>
+			</ul>
+		</div>
+		<div class="navbar-end">
+			<a href="/logout" class="btn">Logout</a>
+		</div>
+	</div>
+}
+
+templ unConnected() {
+	<div class="navbar bg-base-100">
+		<div class="navbar-start">
+			<div class="dropdown">
+				<div tabindex="0" role="button" class="btn btn-ghost lg:hidden">
+					<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16"></path></svg>
+				</div>
+				<ul tabindex="0" class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
+					<li><a href="/login">Login</a></li>
+					<li><a href="/register">Register</a></li>
+				</ul>
+			</div>
+			<a href="/" class="btn btn-ghost text-xl">App</a>
+		</div>
+		<div class="navbar-end">
+			<a href="/auth/login" class="btn">Login</a>
+			<a href="/auth/login" class="btn">Login</a>
+		</div>
+	</div>
+}

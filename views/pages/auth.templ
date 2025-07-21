@@ -1,0 +1,41 @@
+package pages
+
+templ RegisterPage(err string) {
+	<section class="w-full h-screen flex justify-center items-center">
+		<form action="/auth/register" method="post">
+			<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+				<legend class="fieldset-legend">Register</legend>
+				<label class="label">Email</label>
+				<input type="email" name="email" class="input" placeholder="Email" required/>
+				<label class="label">Password</label>
+				<input type="password" name="password" class="input" placeholder="Password" required/>
+				<label class="label">Repeat Password</label>
+				<input type="password" name="repeat" class="input" placeholder="Repeat Password" required/>
+				if err != "" {
+					<div class="text-error">{ err }</div>
+				}
+				<button class="btn btn-neutral mt-4" type="submit">Register</button>
+				<p class="text-sm mt-2">Already have an account? <a href="/auth/login" class="link">Login</a></p>
+			</fieldset>
+		</form>
+	</section>
+}
+
+templ LoginPage(err string) {
+	<section class="w-full h-screen flex justify-center items-center">
+		<form action="/auth/login" method="post">
+			<fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+				<legend class="fieldset-legend">Login</legend>
+				<label class="label">Email</label>
+				<input type="email" name="email" class="input" placeholder="Email" required/>
+				<label class="label">Password</label>
+				<input type="password" name="password" class="input" placeholder="Password" required/>
+				if err != "" {
+					<div class="text-error">{ err }</div>
+				}
+				<button class="btn btn-neutral mt-4">Login</button>
+				<p class="text-sm mt-2">Don't have an account? <a href="/auth/register" class="link">Register</a></p>
+			</fieldset>
+		</form>
+	</section>
+}

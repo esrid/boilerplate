@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "build:css": "tailwindcss -i ./views/static/css/app.css -o ./views/static/css/style.css & templ generate"
+  },
+  "devDependencies": {
+    "daisyui": "^5.0.46"
+  }
+}
